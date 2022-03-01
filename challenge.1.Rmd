@@ -65,23 +65,32 @@ reps <- 1000
 for (i in no.replacement$decade){
   samp.means.dist <- do(reps) * mean(~ runtimeMinutes, data = sample_n(filter(d, decade == i), size = 100, replace = FALSE))
   sampdist.df[[i]] <- samp.means.dist$mean
-  print(histogram(sampdist.df [[i]]))
 }
+# print(histogram(sampdist.df [[i]]))
+#pivot_longer
+sampdist.df_longer <- sampdist.df %>% pivot_longer(cols=everything(), names_to="decade", values_to="avg_runtime_mean")
 
-mean(sampdist.df) %>% group_by(decade)
+p <- ggplot(data=sampdist.df_longer, aes(x=avg_runtime_mean)) + geom_histogram() +facet_wrap(~factor(decade))
+
+summary(sampdist.df_longer)
+
+histogram(sampdist.df_longer$avg_runtime_mean)
+p
 ```
 
 Calculating mean and standard deviation of sampling distribution of sample means for each decade
 ```{r}
+samp.dist.mean <- colMeans(sampdist.df)
+samp.dist.std.error <- apply(sampdist.df,2,sd)
 
-
-  
-
-#mean.samp.dist <- sort(samp.dist$decade) %>% mean(samp.dist$mean, na.rm=TRUE)
-
+samp.dist.mean
+samp.dist.std.error 
 ```
 
-
+Compare the standard error in runtimeMinutes for samples of size 100 from each decade:
+[1] as estimated from your first sample of 100 movies #
+[2] as calculated from the known population standard deviations for each decade 
+[3] as estimated from the sampling distribution of sample means for each decade
 ```{r}
 
 ```
