@@ -1,0 +1,76 @@
+---
+title: "Untitled"
+author: "Karim Primov"
+date: "3/1/2022"
+output: html_document
+---
+
+Challenge 1
+```{r}
+f <- "https://raw.githubusercontent.com/difiore/ada-2022-datasets/main/IMDB-movies.csv"
+```
+
+Filtering data to only include movies from 1920-1979
+```{r}
+d <- read_csv(f, col_names = TRUE) %>%
+  filter(startYear %in% 1920:1979) %>% 
+  filter(runtimeMinutes %in% 60:180)%>%
+  mutate(decade = case_when(startYear <=1929 ~ "20's", 
+                            startYear <=1939 & startYear >=1930 ~"30's",
+                            startYear <=1949 & startYear >=1940 ~"40's",
+                            startYear <=1959 & startYear >=1950 ~"50's",
+                            startYear <=1969 & startYear >=1960 ~"60's",
+                            startYear <=1979 & startYear >=1970 ~"70's"))
+```
+
+Get separate histograms for runtimes for each decade
+```{r}
+ggplot(data = d, aes(x = runtimeMinutes)) + 
+  geom_histogram() + 
+  facet_wrap(~decade)
+```
+
+one-line statement to calculate pop. mean and pop. std.dev in runtimeMinutes for each decade and save results in new df called "results"
+```{r}
+results <- group_by(d, decade) %>% 
+  summarise(pop.mean = mean(runtimeMinutes, na.rm = TRUE), pop.std.dev = sd(runtimeMinutes, na.rm = TRUE))
+
+results
+```
+
+Draw single sample of 100 movies w/o replacement
+```{r}
+no.replacement <- group_by(d, decade) %>% 
+ sample_n(size = 100, replace = FALSE) %>%
+  summarise(sample.mean = mean(runtimeMinutes, na.rm = TRUE), sample.std.dev = sd(runtimeMinutes, na.rm = TRUE)) %>%
+  mutate(std.error.decade = sample.std.dev / sqrt(100))
+
+no.replacement
+```
+
+Generating sampling distribution of mean runtimeMinutes
+```{r}
+reps <- 1000
+n <- 100
+samp.dist <- do(reps)*sample_n(group_by(d, decade), n, replace=FALSE)%>%
+  group_by(decade)%>%
+  summarise(mean=mean(runtimeMinutes, na.rm=TRUE), sd=sd(runtimeMinutes, na.rm=TRUE))
+samp.dist
+ggplot(data=samp.dist, aes(x=mean))+geom_histogram()+facet_wrap(~decade)
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
