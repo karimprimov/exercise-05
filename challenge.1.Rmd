@@ -6,6 +6,15 @@ output: html_document
 ---
 
 Challenge 1
+
+Loading libraries 
+```{r}
+library(mosaic)
+library(tidyverse)
+library(ggplot2)
+```
+
+Loading in data 
 ```{r}
 f <- "https://raw.githubusercontent.com/difiore/ada-2022-datasets/main/IMDB-movies.csv"
 ```
@@ -50,13 +59,35 @@ no.replacement
 
 Generating sampling distribution of mean runtimeMinutes
 ```{r}
+sampdist.df <- data.frame(matrix(ncol = 6, nrow = 1000))
+colnames(sampdist.df) <- no.replacement$decade
 reps <- 1000
-n <- 100
-samp.dist <- do(reps)*sample_n(group_by(d, decade), n, replace=FALSE)%>%
-  group_by(decade)%>%
-  summarise(mean=mean(runtimeMinutes, na.rm=TRUE), sd=sd(runtimeMinutes, na.rm=TRUE))
-samp.dist
-ggplot(data=samp.dist, aes(x=mean))+geom_histogram()+facet_wrap(~decade)
+for (i in no.replacement$decade){
+  samp.means.dist <- do(reps) * mean(~ runtimeMinutes, data = sample_n(filter(d, decade == i), size = 100, replace = FALSE))
+  sampdist.df[[i]] <- samp.means.dist$mean
+  print(histogram(sampdist.df [[i]]))
+}
+
+mean(sampdist.df) %>% group_by(decade)
+```
+
+Calculating mean and standard deviation of sampling distribution of sample means for each decade
+```{r}
+
+
+  
+
+#mean.samp.dist <- sort(samp.dist$decade) %>% mean(samp.dist$mean, na.rm=TRUE)
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
 
 ```
 
