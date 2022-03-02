@@ -1,0 +1,86 @@
+---
+title: "challenge.2"
+author: "Karim Primov"
+date: "3/1/2022"
+output: html_document
+---
+
+```{r}
+library(mosaic)
+library(tidyverse)
+library(ggplot2)
+library(radiant)
+library(cowplot)
+```
+
+
+```{r}
+f <- "https://raw.githubusercontent.com/difiore/ada-2022-datasets/main/zombies.csv"
+```
+
+
+```{r}
+z <- read_csv(f, col_names = TRUE)
+```
+
+Calculate the population mean and standard deviation for each quantitative random variable in the dataset: 
+-height
+-weight
+-age
+-number of zombies killed
+-and years of education
+And make boxplots of each variable by gender
+```{r}
+population.mean <- dplyr::summarise(z, mean(height), mean(weight), mean(age), mean(zombies_killed), mean(years_of_education))
+population.mean
+population.stddev <- summarise(z, pop.mean = sd(height), sd(weight), sd(age), sd(zombies_killed), sd(years_of_education))
+population.stddev
+
+pop.variable.1 <- boxplot(height~gender, data = z, xlab = "gender", ylab = "height") 
+pop.variable.2 <- boxplot(weight~gender, data = z, xlab = "gender", ylab = "weight") 
+pop.variable.3 <- boxplot(age~gender, data = z, xlab = "gender", ylab = "age") 
+pop.variable.4 <- boxplot(zombies_killed~gender, data = z, xlab = "gender", ylab = "zombies_killed") 
+pop.variable.5 <- boxplot(years_of_education~gender, data = z, xlab = "gender", ylab = "years_of_education") 
+
+cowplot::plot_grid(pop.variable.1, pop.variable.2, pop.variable.3, pop.variable.4, pop.variable.5, nrow= 2)
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
