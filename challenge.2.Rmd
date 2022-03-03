@@ -8,6 +8,7 @@ output: html_document
 ```{r}
 library(mosaic)
 library(tidyverse)
+library(dplyr)
 library(ggplot2)
 library(radiant)
 library(cowplot)
@@ -31,9 +32,9 @@ Calculate the population mean and standard deviation for each quantitative rando
 -and years of education
 And make boxplots of each variable by gender
 ```{r}
-population.mean <- dplyr::summarise(z, mean(height), mean(weight), mean(age), mean(zombies_killed), mean(years_of_education))
+population.mean <- summarise(z, mean(height), mean(weight), mean(age), mean(zombies_killed), mean(years_of_education))
 population.mean
-population.stddev <- summarise(z, pop.mean = sd(height), sd(weight), sd(age), sd(zombies_killed), sd(years_of_education))
+population.stddev <- summarise(z, sd(height), sd(weight), sd(age), sd(zombies_killed), sd(years_of_education))
 population.stddev
 
 pop.variable.1 <- boxplot(height~gender, data = z, xlab = "gender", ylab = "height") 
@@ -42,7 +43,8 @@ pop.variable.3 <- boxplot(age~gender, data = z, xlab = "gender", ylab = "age")
 pop.variable.4 <- boxplot(zombies_killed~gender, data = z, xlab = "gender", ylab = "zombies_killed") 
 pop.variable.5 <- boxplot(years_of_education~gender, data = z, xlab = "gender", ylab = "years_of_education") 
 
-cowplot::plot_grid(pop.variable.1, pop.variable.2, pop.variable.3, pop.variable.4, pop.variable.5, nrow= 2)
+plot.list <- list(pop.variable.1, pop.variable.2, pop.variable.3, pop.variable.4, pop.variable.5)
+plot_grid(plot.list, nrow = 2)
 ```
 
 

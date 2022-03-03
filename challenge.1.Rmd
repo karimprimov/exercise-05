@@ -95,22 +95,3 @@ Compare the standard error in runtimeMinutes for samples of size 100 from each d
 
 ```
 
-
-```{r}
-
-```
-
-
-```{r}
-
-```
-
-
-```{r}
-
-```
-
-
-```{r}
-
-```
